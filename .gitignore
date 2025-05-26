@@ -1,0 +1,13 @@
+# Node modules (installed packages)
+node_modules/
+
+# Output folder from TypeScript
+dist/
+
+# Log files
+*.log
+
+# Mac system files
+.DS_Store
+
+
