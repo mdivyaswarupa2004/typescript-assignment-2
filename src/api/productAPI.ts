@@ -1,16 +1,13 @@
-import axios from 'axios';
-import * as dotenv from 'dotenv';
+import * as axios from 'axios';
 import { Product } from '../types/productTypes';
 
-dotenv.config(); // Load env variables
-
-const API_URL = process.env.API_URL || '';
+const API_URL = 'https://fakestoreapi.com/products';
 
 export async function fetchProducts(): Promise<Product[]> {
   try {
-    const response = await axios.get<Product[]>(API_URL);
+    const response = await axios.default.get<Product[]>(API_URL);
     return response.data;
-  } catch (error: unknown) {
+  } catch (error) {
     console.error('Failed to fetch products:', error);
     return [];
   }
