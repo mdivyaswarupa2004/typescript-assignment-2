@@ -3,7 +3,7 @@ import { fetchProducts } from './api/productAPI';
 import { Product, CartItem } from './types/productTypes';
 import { AdminService } from './helpers/adminService';
 import { CustomerService } from './helpers/customerService';
-
+import {MenuChoice, UserRole} from './types/enums';
 class ECommerceApp {
   private products: Product[] = [];
   private cart: CartItem[] = [];
@@ -15,7 +15,7 @@ class ECommerceApp {
     this.customerService = new CustomerService(this.products, this.cart);
   }
 
-  async initialize() {
+  async initialize(): Promise<void> {
     console.log(' Loading products...');
     this.products = await fetchProducts();
     console.log(`✅ Loaded ${this.products.length} products`);
@@ -27,15 +27,14 @@ class ECommerceApp {
     this.showMainMenu();
   }
 
-  showMainMenu() {
+  showMainMenu():void {
     console.log('\n=== Welcome to E-Commerce CLI ===');
     console.log('Who are you?');
     console.log('1. Admin');
     console.log('2. Customer');
     console.log('0. Exit');
 
-    const choice = readlineSync.question('Enter your choice: ');
-
+    const choice:string = readlineSync.question('Enter your choice: ');
     switch (choice) {
       case '1':
         this.showAdminMenu();
@@ -54,15 +53,14 @@ class ECommerceApp {
         this.showMainMenu();
     }
   }
-
-  showAdminMenu() {
+  showAdminMenu() : void{
     console.log('\n=== Admin Panel ===');
     console.log('1. Add Product');
     console.log('2. Remove Product');
     console.log('3. View All Products');
     console.log('0. Back to Main Menu');
 
-    const choice = readlineSync.question('Enter your choice: ');
+    const choice:string = readlineSync.question('Enter your choice: ');
 
     switch (choice) {
       case '1':
@@ -88,8 +86,7 @@ class ECommerceApp {
         this.showAdminMenu();
     }
   }
-
-  showCustomerMenu() {
+  showCustomerMenu():void {
     console.log('\n=== Customer Panel ===');
     console.log('1. Search Products');
     console.log('2. Filter Products');
@@ -98,7 +95,7 @@ class ECommerceApp {
     console.log('5. View Cart');
     console.log('0. Back to Main Menu');
 
-    const choice = readlineSync.question('Enter your choice: ');
+    const choice:string= readlineSync.question('Enter your choice: ');
 
     switch (choice) {
       case '1':
@@ -106,7 +103,7 @@ class ECommerceApp {
         this.showCustomerMenu();
         break;
       case '2':
-        this.showFilterMenu();
+        this.customerService.showFilterMenu();
         break;
       case '3':
         this.customerService.viewAllProducts();
@@ -130,53 +127,18 @@ class ECommerceApp {
         this.showCustomerMenu();
     }
   }
-
-  showFilterMenu() {
-    console.log('\n=== Filter Products ===');
-    console.log('1. Filter by Price Range');
-    console.log('2. Filter by Category');
-    console.log('3. Filter by Rating');
-    console.log('0. Back');
-
-    const choice = readlineSync.question('Enter your choice: ');
-
-    switch (choice) {
-      case '1':
-        this.customerService.filterByPrice();
-        this.showFilterMenu();
-        break;
-      case '2':
-        this.customerService.filterByCategory();
-        this.showFilterMenu();
-        break;
-      case '3':
-        this.customerService.filterByRating();
-        this.showFilterMenu();
-        break;
-      case '0':
-      case 'back':
-        this.showCustomerMenu();
-        break;
-      default:
-        console.log('Invalid choice. Please try again.');
-        this.showFilterMenu();
-    }
-  }
-
   private updateServices() {
     this.adminService = new AdminService(this.products);
     this.customerService = new CustomerService(this.products, this.cart);
   }
 }
-
 // Start the application
-async function main() {
+async function main(): Promise<void> {
   try {
-    const app = new ECommerceApp();
+    const app: ECommerceApp = new ECommerceApp();
     await app.initialize();
-  } catch (error) {
+  } catch (error:unknown) {
     console.error('❌ Application error:', error);
   }
 }
-
 main();
