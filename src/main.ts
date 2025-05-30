@@ -3,7 +3,7 @@ import { fetchProducts } from './api/productAPI';
 import { Product, CartItem } from './types/productTypes';
 import { AdminService } from './helpers/adminService';
 import { CustomerService } from './helpers/customerService';
-
+import {MenuChoice, UserRole} from './types/enums';
 class ECommerceApp {
   private products: Product[] = [];
   private cart: CartItem[] = [];
@@ -35,7 +35,6 @@ class ECommerceApp {
     console.log('0. Exit');
 
     const choice:string = readlineSync.question('Enter your choice: ');
-
     switch (choice) {
       case '1':
         this.showAdminMenu();
@@ -54,7 +53,6 @@ class ECommerceApp {
         this.showMainMenu();
     }
   }
-
   showAdminMenu() : void{
     console.log('\n=== Admin Panel ===');
     console.log('1. Add Product');
@@ -88,7 +86,6 @@ class ECommerceApp {
         this.showAdminMenu();
     }
   }
-
   showCustomerMenu():void {
     console.log('\n=== Customer Panel ===');
     console.log('1. Search Products');
@@ -130,15 +127,11 @@ class ECommerceApp {
         this.showCustomerMenu();
     }
   }
-
- 
-
   private updateServices() {
     this.adminService = new AdminService(this.products);
     this.customerService = new CustomerService(this.products, this.cart);
   }
 }
-
 // Start the application
 async function main(): Promise<void> {
   try {
@@ -148,5 +141,4 @@ async function main(): Promise<void> {
     console.error('❌ Application error:', error);
   }
 }
-
 main();
